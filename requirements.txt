@@ -1,0 +1,9 @@
+Django==2.2.8
+gunicorn==20.0.4
+django_heroku==0.3.1
+whitenoise==4.1.2
+django_cors_headers==3.2.1
+djangorestframework==3.11.0
+numpy==1.16.3
+tensorflow==1.14.0
+keras==2.2.4
