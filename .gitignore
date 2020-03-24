@@ -1,6 +1,7 @@
 .idea/
 build/
 dist/
+models/
 *.spec
 *.pyc
 *.exe
