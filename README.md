@@ -19,6 +19,9 @@ The base GUI only depends on PyQt5: `pip install pyqt5`. To produce a standalone
    keras model https://drive.google.com/open?id=1FZXraDDPqbRTX-QeiQclfojgtoLddxQ_
    
    fastai model https://drive.google.com/open?id=0B_voCy5O5sXMTFByemhpZllYREU
+
+   download outputs   https://www.kaggle.com/emmarex/plant-disease-detection-using-keras
+
    
 ## finally running the project
 
