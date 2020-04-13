@@ -16,7 +16,7 @@ The base GUI only depends on PyQt5: `pip install pyqt5`. To produce a standalone
 
    pytorch model  https://drive.google.com/open?id=1ESUImhPX5_DVAV5Z8SEed5LtzsS5HM6A
    
-   keras model https://drive.google.com/open?id=1FZXraDDPqbRTX-QeiQclfojgtoLddxQ
+   keras model https://drive.google.com/file/d/1FZXraDDPqbRTX-QeiQclfojgtoLddxQ_
    
    fastai model https://drive.google.com/open?id=0B_voCy5O5sXMTFByemhpZllYREU
    
