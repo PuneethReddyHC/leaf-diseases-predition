@@ -27,6 +27,11 @@ The base GUI only depends on PyQt5: `pip install pyqt5`. To produce a standalone
 
     python run.py
     
+## If you like my project 
+Bye me Cup of coffee
+
+### Google pay or phonepay number 9535688928
+
 # screenshots
 
 ![Image of 1](https://github.com/PuneethReddyHC/leaf-diseases-predition/blob/master/screenshots/1.png)
