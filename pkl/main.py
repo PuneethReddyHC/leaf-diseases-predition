@@ -6,8 +6,8 @@ import base64
 import warnings
 warnings.filterwarnings("ignore")
 from . import image_converter
-
-
+import keras
+keras.backend.clear_session()
 def predict_plant_disease(imgpth):
     try:
         with open(imgpth, "rb") as f:

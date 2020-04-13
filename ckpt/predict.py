@@ -35,7 +35,7 @@ def process_image(image):
     return npImage
 
 
-loaded_model, class_to_idx = load_checkpoint('plants9615_checkpoint.pth')
+loaded_model, class_to_idx = load_checkpoint('./models/plants9615_checkpoint.pth')
 idx_to_class = { v : k for k,v in class_to_idx.items()}
 
 def predict(image_path, model, topk=5):

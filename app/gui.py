@@ -7,6 +7,7 @@ from .ui.appgui import Ui_MainWindow
 from PyQt5.QtGui  import *
 from PyQt5.QtCore  import *
 from PyQt5 import uic
+import json
 global ImageFile
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -40,6 +41,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.segmentlabel.setGeometry(QRect(560, 145, 95, 20))
         # adding signal and slot 
         self.radioButton_segment.toggled.connect(self.segmentSelected) 
+
+        self.radioButton_torch = QRadioButton(self.frame) 
+        self.radioButton_torch.setGeometry(QRect(630, 145, 95, 20))
+        self.torchlabel = QLabel(self.frame) 
+        self.torchlabel.setText("PyTorch")
+        self.torchlabel.setGeometry(QRect(650, 145, 95, 20))
+        # adding signal and slot 
+        self.radioButton_torch.toggled.connect(self.torchSelected) 
         
         self.radiolabels = QLabel(self.frame)
         self.radiolabels.setGeometry(QRect(330, 170, 300, 20))
@@ -47,8 +56,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selectedModel = ""
         self.show()
     
-    
-        
     def tensorSelected(self, selected): 
         if selected:
             text = '<h3 style=\"color:blue\">You are selected to Analyze using TensorFlow Model</h3>'
@@ -67,6 +74,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.radiolabels.setText(text)
             self.selectedModel = "segment"
     
+    def torchSelected(self, selected): 
+        if selected:
+            text = '<h3 style=\"color:green\">You are selected to Analyze using Pytorch Model</h3>'
+            self.radiolabels.setText(text)
+            self.selectedModel = "pytorch"
+
     def execfile(self, filepath, globals={}, locals=None):
         
         with open(filepath, 'rb') as file:
@@ -92,6 +105,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             elif self.selectedModel == 'keras':
                 self.pklModel()
                 print('#self.pklModel')
+            elif self.selectedModel == 'pytorch':
+                self.ckptModel()
+                print('#self.ckptModel')
             else:
                 text = '<h3 style=\"color:red\">Please Select any one Model</h3>'
                 self.radiolabels.setText(text)
@@ -131,13 +147,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         from hdf5.main import index
         import urllib.parse
         filesrc=urllib.parse.quote(self.imagefile)
+        
+
+        with open('remedies.json', 'r') as f:
+            remedie = json.load(f)
+
+        disease = index(self.imagefile)
+
         text = "<center>" \
            "<img src="+ filesrc +" height=300 width=350>" \
-            "<h1>"+index(self.imagefile)+"</h1>" \
+            "<h1>"+ disease +"</h1>" \
            "&#8291;" \
            "</center>" \
-           "<p>Version 31.4.159.265358<br/>" \
-           "Copyright &copy; Company Inc.</p>"
+            "<h1>Treatment</h1>" \
+           "<p>"+ remedie[disease]+ "<br/>" \
+           " "+ disease +"</p>"
         time.sleep(sleep)
         print(index(self.imagefile))
         return text
@@ -145,14 +169,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def hdf5Model(self):
         text = self.hdf5Processing(4)
         QMessageBox.about(self, "Disease Prediction", text)
-        
-    def checkpointsModel(self):
- 
-        from ckpt.main import load_checkpoint,view_classify
-        from ckpt.predict import predict
-        from ckpt.predict import loaded_model
-        p, c = predict(self.imagefile, loaded_model)
-        view_classify(self.imagefile, p, c, cat_to_name)
+
+    
 
     @long_operation("Calculation")
     def pklProcessing(self, sleep):
@@ -160,13 +178,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         from pkl.main import predict_plant_disease
         import urllib.parse
         filesrc=urllib.parse.quote(self.imagefile)
+
+        with open('remedies.json', 'r') as f:
+            remedie = json.load(f)
+
+        disease = str(predict_plant_disease(self.imagefile))
         text = "<center>" \
            "<img src="+ filesrc +" height=300 width=350>" \
-            "<h1>"+ str(predict_plant_disease(self.imagefile)) +"</h1>" \
+            "<h1>"+ disease +"</h1>" \
            "&#8291;" \
            "</center>" \
-           "<p>Version 31.4.159.265358<br/>" \
-           "Copyright &copy; Company Inc.</p>"
+           "<h1>Treatment</h1>" \
+           "<p>"+ remedie[disease]+"<br/>" \
+           " "+ disease +"</p>"
         time.sleep(sleep)
         print('End')
         return text
@@ -175,7 +199,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         text = self.pklProcessing(4)
         QMessageBox.about(self, "Disease Prediction", text)
-        
+
+    def ckptModel(self):
+
+        text = self.ckptprocessing()
+        QMessageBox.about(self, "Disease Prediction", text)
+
+    
+    def ckptModel(self):
+        print("Start")
+        from ckpt.main import load_checkpoint
+        from ckpt.predict import predict
+        from ckpt.predict import loaded_model
+        with open('categories.json', 'r') as f:
+            cat_to_name = json.load(f)
+        p, c = predict(self.imagefile, loaded_model)
+        self.view_classify(self.imagefile, p, c, cat_to_name)
+        print("End")
+
+
+    def view_classify(self, img, probabilities, classes, mapper):
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from PIL import Image
+        img = Image.open(img)
+        fig, (ax1, ax2) = plt.subplots(figsize=(10,10), ncols=1, nrows=2)
+        plt.subplots_adjust(top=0.995,bottom=0.127,left=0.402,right=0.964,hspace=0.051,wspace=0.21)
+        ax1.imshow(img)
+        ax1.axis('off')
+        y_pos = np.arange(len(probabilities))
+        ax2.barh(y_pos, probabilities)
+        ax2.set_yticks(y_pos)
+        ax2.set_yticklabels([mapper[x] for x in classes])
+        ax2.invert_yaxis()
+        plt.show()
 
     def resnetModel(self):
         from resnet34.main import analyze
@@ -195,7 +252,7 @@ class Window2(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
         highlight_dir = 'C:/Users/punehemukeeru/Documents/1Aplantdiseases/pyqt-gui-template/tests'
 
-        self.scrollArea =QScrollArea(widgetResizable=True)
+        self.scrollArea = QScrollArea(widgetResizable=True)
         self.setCentralWidget(self.scrollArea)
         content_widget = QWidget()
         self.scrollArea.setWidget(content_widget)

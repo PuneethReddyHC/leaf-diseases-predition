@@ -10,10 +10,7 @@ deleteImages()
 def endprogram():
 	print ("\nProgram terminated!")
 	sys.exit()
-import json
 
-with open('categories.json', 'r') as f:
-    cat_to_name = json.load(f)
 # Get index to class mapping
 
 #Reading the image by parsing the argument

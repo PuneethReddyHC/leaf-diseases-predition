@@ -340,7 +340,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionHttps_gitter_im_Automatic_leaf_infection_identification_Lobby">
    <property name="text">
-    <string>https://gitter.im/Automatic-leaf-infection-identification/Lobby</string>
+    <string>https://github.com/puneethreddyhc/plant-disease-prediction</string>
    </property>
   </action>
   <action name="actionHelp">
