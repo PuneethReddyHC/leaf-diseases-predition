@@ -71,7 +71,6 @@ The base GUI only depends on PyQt5: `pip install pyqt5`. To produce a standalone
 ## If you like my project 
 Bye me Cup of coffee
 
-### Google pay or phonepay number 9535688928
 
 # screenshots
 
