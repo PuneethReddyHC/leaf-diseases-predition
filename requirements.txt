@@ -1,7 +1,7 @@
 tensorflow==1.14.0
 keras==2.2.4
 cv2==3.4.5
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 fastai==1.0.59
 pillow
